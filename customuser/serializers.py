@@ -6,6 +6,7 @@ from dj_rest_auth.serializers import LoginSerializer
 class CustomRegisterSerializer(RegisterSerializer):
     full_name = serializers.CharField()
     is_provider = serializers.BooleanField()
+    firebase_token = serializers.CharField()
 
     def get_cleaned_data(self):
         super(CustomRegisterSerializer, self).get_cleaned_data()
@@ -16,11 +17,12 @@ class CustomRegisterSerializer(RegisterSerializer):
             'password1': self.validated_data.get('password1', ''),
             'password2': self.validated_data.get('password2', ''),
             'is_provider': self.validated_data.get('is_provider', ''),
+            'firebase_token': self.validated_data.get('firebase_token', ''),
         }
     
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
-        fields = ('pk','username','email','full_name','is_provider')
+        fields = ('pk','username','email','full_name','is_provider', 'firebase_token')
         read_only_fields = ('username','email','first_name','last_name')
 
 class CustomLoginSerializer(LoginSerializer):

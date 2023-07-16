@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJ_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJ_DEBUG')
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'customuser',
 ]
@@ -80,8 +81,8 @@ REST_AUTH = {
 
 ACCOUNT_ADAPTER = 'customuser.adapter.CustomAccountAdapter'
 AUTH_USER_MODEL = 'customuser.CustomUser'
+
 ACCOUNT_EMAIL_VERIFICATION = "none"
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 
@@ -92,6 +93,24 @@ AUTHENTICATION_BACKENDS = [
     # allauth specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.environ.get('GOOGLE_CLIENT_ID'),
+            "secret": os.environ.get('GOOGLE_SECRET_ID'),
+            "key": "",
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
+    }
+}
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),

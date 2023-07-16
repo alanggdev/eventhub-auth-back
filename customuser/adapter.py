@@ -6,5 +6,6 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         data = form.cleaned_data
         user.full_name = data.get('full_name')
         user.is_provider = data.get('is_provider')
+        user.firebase_token = data.get('firebase_token')
         user.save()
         return user
