@@ -1,5 +1,5 @@
 from django.urls import include, path
-from customuser.views import GoogleLogin, getUserInformation
+from customuser.views import GoogleLogin, getUserInformation, delete_user
 
 urlpatterns = [
     path('', include('dj_rest_auth.urls')),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('google/connect/', GoogleLogin.as_view(), name='google_connect'),
     path('user/<int:id>', getUserInformation),
+    path('delete/<username>', delete_user),
 ]

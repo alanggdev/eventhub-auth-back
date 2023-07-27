@@ -11,6 +11,9 @@ from customuser.serializers import CustomUserDetailsSerializer
 from customuser.models import CustomUser
 import json
 
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
     client_class = OAuth2Client
@@ -33,3 +36,12 @@ def getUserInformation(request, id, format=None):
         return Response(custom_response("Success", serializer.data, status=status.HTTP_200_OK))
     except ObjectDoesNotExist:
         return Response(custom_response("Error", "Not found", status=status.HTTP_404_NOT_FOUND))
+    
+@api_view(['DELETE'])
+def delete_user(request, username):
+    try:
+        user = CustomUser.objects.get(username=username)
+        user.delete()
+        return Response(custom_response("Success", "User deleted", status=status.HTTP_200_OK))
+    except Exception as e: 
+        return Response(custom_response("Error", "Something went wrong!", status=status.HTTP_404_NOT_FOUND))
